@@ -1,5 +1,7 @@
 class GameManager {
   constructor() {
+    this.playerColors = ['#4A90E2', '#7ED321', '#F5A623', '#BD10E0', '#E24A4A', '#FF6B6B', '#4ECDC4', '#95E1D3'];
+    this.playerAvatars = ['🔵', '🟢', '🟡', '🟣', '🔴', '🟠', '🔷', '🟩'];
     this.rooms = new Map();
   }
 
@@ -27,6 +29,8 @@ class GameManager {
       host: hostId,
       players: [{
         id: hostId,
+        color: this.playerColors[0],
+        avatar: this.playerAvatars[0],
         name: hostName,
         ready: false,
         scores: {
@@ -72,6 +76,8 @@ class GameManager {
     // Add player
     room.players.push({
       id: playerId,
+      color: this.playerColors[room.players.length % this.playerColors.length],
+      avatar: this.playerAvatars[room.players.length % this.playerAvatars.length],
       name: playerName,
       ready: false,
       scores: {

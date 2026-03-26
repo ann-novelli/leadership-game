@@ -1,3 +1,56 @@
+// Sound Effects System
+const sounds = {
+    enabled: true,
+    
+    play(frequency, duration, type = 'sine') {
+        if (!this.enabled) return;
+        
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = frequency;
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        } catch (e) {
+            console.log('Sound not supported');
+        }
+    },
+    
+    playerJoin() {
+        this.play(523.25, 0.2); // C5
+    },
+    
+    responseSubmit() {
+        this.play(659.25, 0.15); // E5
+    },
+    
+    timerWarning() {
+        this.play(440, 0.1); // A4
+    },
+    
+    scenarioComplete() {
+        this.play(783.99, 0.3); // G5
+        setTimeout(() => this.play(1046.50, 0.3), 150); // C6
+    },
+    
+    gameComplete() {
+        this.play(523.25, 0.2); // C5
+        setTimeout(() => this.play(659.25, 0.2), 100); // E5
+        setTimeout(() => this.play(783.99, 0.2), 200); // G5
+        setTimeout(() => this.play(1046.50, 0.4), 300); // C6
+    }
+};
+
 // UI Management and Helper Functions
 
 // Screen management
@@ -55,8 +108,8 @@ function updateLobby(roomCode, players, isHost) {
         playerCount.textContent = players.length;
         
         playersList.innerHTML = players.map(player => `
-            <div class="player-item ${player.id === socketManager.socket.id ? 'host' : ''}">
-                <span class="player-icon">👤</span>
+            <div class="player-item ${player.id === socketManager.socket.id ? 'host' : ''}" style="border-left: 4px solid ${player.color || '#4A90E2'}">
+                <span class="player-icon" style="font-size: 1.8em;">${player.avatar || '👤'}</span>
                 <span class="player-name">${player.name}</span>
                 ${player.id === socketManager.socket.id && isHost ? '<span class="player-badge">Host</span>' : ''}
             </div>
@@ -85,6 +138,36 @@ function updateReadyStatus(readyCount, totalPlayers) {
         statusDiv.textContent += ' - Starting scenario...';
     }
 }
+// Render progress board
+function renderProgressBoard(currentScenario, totalScenarios) {
+    const progressPath = document.getElementById('progress-path');
+    if (!progressPath) return;
+    
+    const nodes = [];
+    const progressPercent = ((currentScenario - 1) / (totalScenarios - 1)) * 100;
+    
+    for (let i = 1; i <= totalScenarios; i++) {
+        let nodeClass = 'upcoming';
+        let nodeContent = i;
+        
+        if (i < currentScenario) {
+            nodeClass = 'completed';
+            nodeContent = '✓';
+        } else if (i === currentScenario) {
+            nodeClass = 'current';
+        }
+        
+        nodes.push(`<div class="progress-node ${nodeClass}">${nodeContent}</div>`);
+    }
+    
+    progressPath.innerHTML = `
+        <div class="progress-line">
+            <div class="progress-line-fill" style="width: ${progressPercent}%"></div>
+        </div>
+        ${nodes.join('')}
+    `;
+}
+
 
 // Display scenario
 let selectedOption = null;
@@ -96,6 +179,9 @@ function displayScenario(data) {
     
     // Update progress
     document.getElementById('current-scenario').textContent = data.scenarioNumber;
+    
+    // Render progress board
+    renderProgressBoard(data.scenarioNumber, data.totalScenarios);
     document.getElementById('total-scenarios').textContent = data.totalScenarios;
     
     // Update category
@@ -158,6 +244,7 @@ function startTimer(seconds) {
         // Update timer color based on remaining time
         timerDisplay.className = 'scenario-timer';
         if (remaining <= 10) {
+            sounds.timerWarning();
             timerDisplay.classList.add('danger');
         } else if (remaining <= 30) {
             timerDisplay.classList.add('warning');

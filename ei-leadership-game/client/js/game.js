@@ -141,6 +141,7 @@ function setupEventListeners() {
         submitResponseBtn.disabled = true;
         submitResponseBtn.textContent = 'Response Submitted';
         
+        sounds.responseSubmit();
         socketManager.submitResponse(currentScenarioId, selectedOption);
         showToast('Response submitted!', 'success');
     });

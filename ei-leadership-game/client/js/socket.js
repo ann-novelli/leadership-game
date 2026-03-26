@@ -60,6 +60,7 @@ class SocketManager {
         this.socket.on('playerJoined', (data) => {
             console.log('Player joined:', data);
             updateLobby(this.roomCode, data.players, this.isHost);
+            sounds.playerJoin();
             showToast(`${data.newPlayer} joined the game`, 'success');
         });
 
@@ -103,11 +104,13 @@ class SocketManager {
             console.log('Scenario results:', data);
             showScreen('discussion-screen');
             displayResults(data);
+            sounds.scenarioComplete();
             startDiscussionTimer(data.discussionTime);
         });
 
         this.socket.on('finalResults', (data) => {
             console.log('Final results:', data);
+            sounds.gameComplete();
             showScreen('results-screen');
             displayFinalResults(data, this.playerId);
         });
