@@ -1,0 +1,27 @@
+{
+  "name": "ei-leadership-game",
+  "version": "1.0.0",
+  "description": "Multiplayer Emotional Intelligence Leadership Game based on Daniel Goleman's 'What Makes a Leader'",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js"
+  },
+  "keywords": [
+    "emotional-intelligence",
+    "leadership",
+    "multiplayer",
+    "game",
+    "websocket"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.6.1",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
