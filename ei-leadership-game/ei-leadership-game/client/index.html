@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EI Leadership Game - Based on Daniel Goleman's "What Makes a Leader"</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <!-- Landing Screen -->
+    <div id="landing-screen" class="screen active">
+        <div class="container">
+            <header class="game-header">
+                <h1>Emotional Intelligence Leadership Game</h1>
+                <p class="subtitle">Based on Daniel Goleman's "What Makes a Leader"</p>
+                <p class="citation">Harvard Business Review (1998)</p>
+            </header>
+
+            <div class="intro-content">
+                <p class="intro-text">
+                    This multiplayer game assesses and facilitates discussion around the five components 
+                    of Emotional Intelligence that distinguish outstanding leaders.
+                </p>
+                
+                <div class="ei-components-preview">
+                    <div class="ei-component" data-component="selfAwareness">
+                        <span class="component-icon">🧠</span>
+                        <span class="component-name">Self-Awareness</span>
+                    </div>
+                    <div class="ei-component" data-component="selfRegulation">
+                        <span class="component-icon">⚖️</span>
+                        <span class="component-name">Self-Regulation</span>
+                    </div>
+                    <div class="ei-component" data-component="motivation">
+                        <span class="component-icon">🎯</span>
+                        <span class="component-name">Motivation</span>
+                    </div>
+                    <div class="ei-component" data-component="empathy">
+                        <span class="component-icon">❤️</span>
+                        <span class="component-name">Empathy</span>
+                    </div>
+                    <div class="ei-component" data-component="socialSkills">
+                        <span class="component-icon">🤝</span>
+                        <span class="component-name">Social Skills</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <input type="text" id="player-name-input" placeholder="Enter your name" maxlength="20">
+                <button id="create-room-btn" class="btn btn-primary">Create New Game</button>
+                <div class="divider">OR</div>
+                <input type="text" id="room-code-input" placeholder="Enter room code" maxlength="6">
+                <button id="join-room-btn" class="btn btn-secondary">Join Game</button>
+            </div>
+
+            <div class="game-info">
+                <p><strong>Players:</strong> 3-8 players</p>
+                <p><strong>Duration:</strong> 45-50 minutes</p>
+                <p><strong>Format:</strong> Scenario-based assessment with group discussion</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lobby Screen -->
+    <div id="lobby-screen" class="screen">
+        <div class="container">
+            <header class="game-header">
+                <h1>Game Lobby</h1>
+                <div class="room-code-display">
+                    <span class="label">Room Code:</span>
+                    <span id="room-code" class="code">------</span>
+                    <button id="copy-code-btn" class="btn-icon" title="Copy code">📋</button>
+                </div>
+                <div class="share-link-section">
+                    <p class="share-label">Share this link with players:</p>
+                    <div class="share-link-container">
+                        <input type="text" id="share-link" class="share-link-input" readonly>
+                        <button id="copy-link-btn" class="btn btn-secondary">Copy Link</button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="lobby-content">
+                <div class="players-section">
+                    <h2>Players (<span id="player-count">0</span>/8)</h2>
+                    <div id="players-list" class="players-list"></div>
+                </div>
+
+                <div class="ei-info-section">
+                    <h3>Five Components of Emotional Intelligence</h3>
+                    <div class="ei-definitions">
+                        <div class="ei-definition" data-component="selfAwareness">
+                            <h4>🧠 Self-Awareness</h4>
+                            <p>Understanding your emotions, strengths, weaknesses, and their impact on others</p>
+                        </div>
+                        <div class="ei-definition" data-component="selfRegulation">
+                            <h4>⚖️ Self-Regulation</h4>
+                            <p>Controlling disruptive impulses and adapting to change</p>
+                        </div>
+                        <div class="ei-definition" data-component="motivation">
+                            <h4>🎯 Motivation</h4>
+                            <p>Passion for work beyond money or status; drive to achieve</p>
+                        </div>
+                        <div class="ei-definition" data-component="empathy">
+                            <h4>❤️ Empathy</h4>
+                            <p>Understanding the emotional makeup of other people</p>
+                        </div>
+                        <div class="ei-definition" data-component="socialSkills">
+                            <h4>🤝 Social Skills</h4>
+                            <p>Managing relationships and building networks effectively</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lobby-actions">
+                <button id="start-game-btn" class="btn btn-primary" disabled>Start Game (Need 3+ players)</button>
+                <button id="leave-lobby-btn" class="btn btn-secondary">Leave Lobby</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Introduction Screen -->
+    <div id="introduction-screen" class="screen">
+        <div class="container">
+            <header class="game-header">
+                <h1>Welcome to the EI Leadership Game</h1>
+            </header>
+
+            <div class="introduction-content">
+                <div class="intro-section">
+                    <h2>About This Game</h2>
+                    <p>
+                        You'll face workplace leadership scenarios and choose how you would respond. 
+                        Each choice reflects different aspects of emotional intelligence.
+                    </p>
+                </div>
+
+                <div class="intro-section">
+                    <h2>How It Works</h2>
+                    <ol>
+                        <li>Read each scenario carefully (you'll have 90 seconds)</li>
+                        <li>Select the response that best matches your approach</li>
+                        <li>After everyone responds, we'll discuss the choices together</li>
+                        <li>At the end, you'll see your EI profile and areas for growth</li>
+                    </ol>
+                </div>
+
+                <div class="intro-section">
+                    <h2>Remember</h2>
+                    <ul>
+                        <li>There are no "perfect" answers - this is about self-awareness</li>
+                        <li>Be honest in your responses</li>
+                        <li>Participate actively in discussions</li>
+                        <li>Learn from different perspectives</li>
+                    </ul>
+                </div>
+
+                <div class="quote-box">
+                    <p class="quote">
+                        "The most effective leaders are alike in one crucial way: they all have 
+                        a high degree of what has come to be known as emotional intelligence."
+                    </p>
+                    <p class="quote-author">— Daniel Goleman</p>
+                </div>
+            </div>
+
+            <div class="intro-actions">
+                <button id="ready-btn" class="btn btn-primary">I'm Ready</button>
+                <div id="ready-status" class="ready-status"></div>
+            </div>
+        </div>
+    </div>
+
+            <div class="progress-board">
+                <div class="progress-path" id="progress-path"></div>
+            </div>
+
+    <!-- Scenario Screen -->
+    <div id="scenario-screen" class="screen">
+        <div class="container">
+            <div class="scenario-header">
+                <div class="scenario-progress">
+                    <span>Scenario <span id="current-scenario">1</span> of <span id="total-scenarios">6</span></span>
+                </div>
+                <div class="scenario-timer">
+                    <span id="timer-display">1:30</span>
+                </div>
+            </div>
+
+            <div class="scenario-content">
+                <div class="scenario-category">
+                    <span id="scenario-category">Category</span>
+                </div>
+                
+                <div class="scenario-text">
+                    <h2>Situation</h2>
+                    <p id="scenario-context" class="context-text"></p>
+                    
+                    <h3>Challenge</h3>
+                    <p id="scenario-challenge" class="challenge-text"></p>
+                </div>
+
+                <div class="scenario-options">
+                    <h3>How would you respond?</h3>
+                    <div id="options-list" class="options-list"></div>
+                </div>
+            </div>
+
+            <div class="scenario-actions">
+                <button id="submit-response-btn" class="btn btn-primary" disabled>Submit Response</button>
+                <div id="response-status" class="response-status"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Discussion Screen -->
+    <div id="discussion-screen" class="screen">
+        <div class="container">
+            <div class="discussion-header">
+                <h2>Scenario Results & Discussion</h2>
+                <div class="discussion-timer">
+                    Discussion Time: <span id="discussion-timer">4:00</span>
+                </div>
+            </div>
+
+            <div class="discussion-content">
+                <div class="responses-section">
+                    <h3>How Everyone Responded</h3>
+                    <div id="responses-display" class="responses-display"></div>
+                </div>
+
+                <div class="ei-mapping-section">
+                    <h3>EI Component Mapping</h3>
+                    <div id="ei-mapping-display" class="ei-mapping-display"></div>
+                </div>
+
+                <div class="discussion-prompts-section">
+                    <h3>Discussion Questions</h3>
+                    <ul id="discussion-prompts" class="discussion-prompts"></ul>
+                </div>
+
+                <div class="learning-points-section">
+                    <h3>Key Learning Points</h3>
+                    <ul id="learning-points" class="learning-points"></ul>
+                </div>
+            </div>
+
+            <div class="discussion-actions">
+                <button id="next-scenario-btn" class="btn btn-primary" disabled>Next Scenario</button>
+                <p class="host-note">Only the host can advance to the next scenario</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen" class="screen">
+        <div class="container">
+            <header class="game-header">
+                <h1>Your Emotional Intelligence Profile</h1>
+                <p class="subtitle">Based on your responses across all scenarios</p>
+            </header>
+
+            <div class="results-content">
+                <div class="individual-results">
+                    <h2>Your Profile</h2>
+                    <canvas id="individual-chart" width="400" height="400"></canvas>
+                    <div id="individual-scores" class="score-details"></div>
+                </div>
+
+                <div class="group-results">
+                    <h2>Group Average</h2>
+                    <canvas id="group-chart" width="400" height="400"></canvas>
+                    <div id="group-scores" class="score-details"></div>
+                </div>
+
+                <div class="insights-section">
+                    <h2>Your Strengths & Development Areas</h2>
+                    <div id="insights-display" class="insights-display"></div>
+                </div>
+
+                <div class="recommendations-section">
+                    <h2>Recommendations for Growth</h2>
+                    <div id="recommendations-display" class="recommendations-display"></div>
+                </div>
+
+                <div class="resources-section">
+                    <h2>Learn More</h2>
+                    <p>
+                        This game is based on Daniel Goleman's research on emotional intelligence in leadership. 
+                        To deepen your understanding:
+                    </p>
+                    <ul>
+                        <li>Read the full article: "What Makes a Leader" (Harvard Business Review, 1998)</li>
+                        <li>Book: <em>Emotional Intelligence</em> by Daniel Goleman</li>
+                        <li>Book: <em>Primal Leadership</em> by Goleman, Boyatzis, and McKee</li>
+                        <li>HBR's 10 Must Reads on Emotional Intelligence</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="results-actions">
+                <button id="play-again-btn" class="btn btn-primary">Play Again</button>
+                <button id="download-results-btn" class="btn btn-secondary">Download Results</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error/Message Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Loading Indicator -->
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p>Connecting...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="js/socket.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>
